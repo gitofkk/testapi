@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Create Article</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+
+  <!-- JS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="header">
+      <div class="row">
+        <div class="eight columns"><h3>Article API</h3></div>
+        <div class="four columns"><a href="index.html" class="button button-primary">Home</a></div>
+      </div>
+    </div>
+    <div class="content">
+      <h5>Create Article</h5>
+      <p id="message" class="green-color"></p>
+      <form onsubmit="return create_article(this)" >        
+          <label>Title <br/><input type="text" name="title"/></label>
+          <label>Author <br/> <input type="text" name="author"/></label>
+          <label>Content <br/> <textarea name="content" ></textarea></label>
+          <input type="submit" value="Create" class="button-primary"/>
+      </form>  
+    </div>
+    <div class="footer">
+      <p>Copyright &copy;2018.</p>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script type="text/javascript">
+    function create_article(form) {
+      var arraydata = $(form).serializeArray();
+      var jsondata = {};
+      
+      jQuery.each(arraydata, function() {
+        jsondata[this.name] = this.value || '';
+       });
+      //console.log(jsondata);
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8000/article/lists/',
+        dataType: 'json',
+        data: jsondata,
+        success: function (data, textStatus, xhr) {
+          if(xhr.status == 201) {
+            $('#message').text('Successfully Created');
+            $(form).trigger("reset");
+          }
+        }
+      });
+
+      return false;
+    }
+  </script>
+</body>
+</html>
